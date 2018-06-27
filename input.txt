@@ -1,0 +1,2 @@
+File di input per testare il funzionamento del programma swordx
+
