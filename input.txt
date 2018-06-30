@@ -1,2 +1,1 @@
-File di input per testare il funzionamento del programma swordx
-
+Ciao mi chiamo Matteo e questo e' un file di testo in input
