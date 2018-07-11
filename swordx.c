@@ -21,7 +21,9 @@
 #include <sys/stat.h>
 #include <getopt.h>
 #include <glob.h>
+#include "occorrenze.h"
 
+#define LEN 256
 #define DIM 256
 
 int opt; // Opzione scelta
@@ -124,13 +126,7 @@ void splitFile(FILE *fileIN, FILE *fileOUT){
     
 }
 
-void getOccurrency(FILE *fileIN, FILE *fileOUT){
-    
-}
 
-void getRecursive(){
-    
-}
 
 int main(int argc, char** argv) {    
     
@@ -140,66 +136,15 @@ int main(int argc, char** argv) {
      * argv[1]: primo argomento: opzione
      * argv[2]: secondo argomento: file in input */
     
-    printf("BENVENUTO");
+    //    printf("BENVENUTO");
     FILE *file = fopen(argv[2], "r"); // File di input
     FILE *fileOUTPUT = fopen("swordx.out", "w+"); // File di output
-    
-    char array[DIM];
-    char parola[DIM];
-    int len;
-    int count[DIM];
-    int i = 0, j = 0;
-    int index = 0;
-    int unico = 0;
-    while(fscanf(file, "%s", array) != EOF){ // Leggi file in input
-        len = strlen(array);
-        if(ispunct(arr[len - 1])){
-            array[len - 1] = '\0';
-        }
-        unico = 1;
-        for(i = 0; i < index && unico; i++){
-            if(strcmp(parola[i], array) == 0){
-                unico = 0;
-            }
-        }
-        
-        if(unico){
-            strcpy(parola[index], array);
-            count[index]++;
-            index++;
-        }
-        else{
-            count[i - 1]++;
-        }
-        //printf("%s\n", array);
-        fprintf(fileOUTPUT, "%s\n", array); // Scrivi array sul file di output
-        
-    }
-    fclose(file);
-    fclose(fileOUTPUT);
-    printf("Occorrenze: \n");
-    for(i = 0; i < index; i++){
-        printf("%s => %d\n", parola[i], count[i]);
-    }
     
     
     while((opt = getopt_long(argc, argv, short_options, long_options, NULL)) != -1){
         switch(opt){
             case 'h':
-                if(argc < 2){
-                    //    getHelp();
-                    printf("File output: \n");
-                    //            splitFile(file, fileOUTPUT); // L'output dovra' essere per forza splittato (swordx.out)
-                    //            getOccurrency(file, fileOUTPUT);
-                    //    scriviFile(file, fileOUTPUT);
-                    
-                    //splitFile(file, fileOUTPUT);
-                    
-                }
-                else{
-                    printf("Troppi argomenti\n");
-                }
-                
+                getHelp();    
                 break;
             case 'r':
                 /*
@@ -235,7 +180,7 @@ int main(int argc, char** argv) {
                 
         }
     }
-    
+    getocc();
     
     return 0;
 }
