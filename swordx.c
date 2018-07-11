@@ -148,17 +148,16 @@ int main(int argc, char** argv) {
                 splitFile(file, fileOUTPUT);
                 break;
             case 'r':
-                /*
-                 printf("\nRecursive\n");
-                 glob_t pglob;
-                 glob(path, GLOB_ONLYDIR, NULL, &pglob);
-                 printf("Trovati %d risultati\n", pglob.gl_pathc);
-                 int i;
-                 for(i = 0; i < pglob.gl_pathc; i++){
-                 printf("File %d: %s\n", i+1, pglob.gl_pathv[i]); // Lista le sottodirectory
-                 }
-                 globfree(&pglob);
-                 */
+                printf("\nRecursive\n");
+                glob_t pglob;
+                glob(path, GLOB_ONLYDIR, NULL, &pglob);
+                printf("Trovati %d risultati\n", pglob.gl_pathc);
+                int i;
+                for(i = 0; i < pglob.gl_pathc; i++){
+                    printf("File %d: %s\n", i+1, pglob.gl_pathv[i]); // Lista le sottodirectory
+                }
+                globfree(&pglob);
+                
                 break;
             case 'f':
                 printf("\nFollow\n");
