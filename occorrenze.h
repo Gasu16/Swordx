@@ -19,7 +19,7 @@ void getocc();
 
 void getocc(){
     // Dovra' essere scambiato con swordx.out
-    FILE *f1 = fopen("/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/input.txt", "r");
+    FILE *f1 = fopen("/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/swordx.out", "r");
     int len;
     char parola[LEN][30]; // Puo' contenere LEN parole e un massimo di 30 caratteri per parola
     int count[LEN];

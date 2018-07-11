@@ -32,14 +32,14 @@ const char *short_options = "hrfeamis";
 const char *path = "/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/./*";
 
 struct option long_options[] = {
-    {"help", no_argument, NULL, 'h'}, // FATTO
-    {"recursive", required_argument, NULL, 'r'},
-    {"follow", required_argument, NULL, 'f'},
-    {"explude", required_argument, NULL, 'e'},
-    {"alpha", required_argument, NULL, 'a'},
-    {"min", required_argument, NULL, 'm'},
-    {"ignore", required_argument, NULL, 'i'},
-    {"sortbyoccurrency", required_argument, NULL, 's'},
+    {"help", no_argument, NULL, 'h'}, // V
+    {"recursive", required_argument, NULL, 'r'}, // X
+    {"follow", required_argument, NULL, 'f'}, // X
+    {"explude", required_argument, NULL, 'e'}, // X
+    {"alpha", required_argument, NULL, 'a'}, // X
+    {"min", required_argument, NULL, 'm'}, // X
+    {"ignore", required_argument, NULL, 'i'}, // X
+    {"sortbyoccurrency", required_argument, NULL, 's'}, // X
     {NULL, 0, NULL, 0} // Controllo della fine della struttura
 };
 
@@ -59,7 +59,7 @@ void getHelp(){
          fin quando arrivo a EOF (end of file) */
         printf(" %s", testodaleggere);
     }
-    
+    printf("\n\n");
 }
 
 void leggiFile(FILE *file){
@@ -145,6 +145,7 @@ int main(int argc, char** argv) {
         switch(opt){
             case 'h':
                 getHelp();    
+                splitFile(file, fileOUTPUT);
                 break;
             case 'r':
                 /*
