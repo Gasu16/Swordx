@@ -9,7 +9,7 @@
  * Author: matteo
  *
  * Created on 25 giugno 2018, 12.01
- * Ultima modifica 13 luglio 2018, 19.30
+ * Ultima modifica 13 luglio 2018, 19.59
  */
 
 #include <stdio.h>
@@ -180,7 +180,7 @@ int main(int argc, char** argv) {
         switch(opt){
             case 'h':
                 getHelp();    
-            //    splitFile(file, fileOUTPUT); // ./swordx -h input.txt swordx.out
+                splitFile(file, fileOUTPUT); // ./swordx -h input.txt swordx.out
                 break;
             case 'r':
                 printf("\nRecursive\n");

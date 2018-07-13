@@ -19,7 +19,7 @@ void getocc();
 
 void getocc(){
     // Dovra' essere scambiato con swordx.out
-    FILE *f1 = fopen("/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/swordx.out", "r");
+    FILE *f1 = fopen("/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/swordx.out", "r+");
     int len;
     char parola[LEN][30]; // Puo' contenere LEN parole e un massimo di 30 caratteri per parola
     int count[LEN];
@@ -60,11 +60,13 @@ void getocc(){
             count[i - 1]++;
         }
     }
-    
-    fclose(f1);
-    //printf("\nOccorrenze: \n");
+    int conta;
     for(i = 0; i < index; i++){
+        fprintf(f1, "%s => %d\n", parola[i], count[i]);
         printf("%s => %d\n", parola[i], count[i]);
     }
+    fclose(f1);
+    //printf("\nOccorrenze: \n");
+    
     
 }
