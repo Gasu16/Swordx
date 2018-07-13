@@ -180,7 +180,7 @@ int main(int argc, char** argv) {
         switch(opt){
             case 'h':
                 getHelp();    
-                //splitFile(file, fileOUTPUT); // Da commentare
+            //    splitFile(file, fileOUTPUT); // ./swordx -h input.txt swordx.out
                 break;
             case 'r':
                 printf("\nRecursive\n");
