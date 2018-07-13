@@ -9,7 +9,7 @@
  * Author: matteo
  *
  * Created on 25 giugno 2018, 12.01
- * Ultima modifica 11 luglio 2018, 18.03
+ * Ultima modifica 13 luglio 2018, 19.30
  */
 
 #include <stdio.h>
@@ -19,9 +19,11 @@
 #include <unistd.h>
 #include <argp.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <getopt.h>
-#include <glob.h>
+#include <dirent.h>
 #include "occorrenze.h"
+
 
 #define LEN 256
 #define DIM 256
@@ -126,7 +128,41 @@ void splitFile(FILE *fileIN, FILE *fileOUT){
     
 }
 
+int isDirectory(const char* path){
+    struct stat path_stat;
+    stat(path, &path_stat);
+    if(S_ISDIR(path_stat.st_mode)){
+        return 0;
+    }
+    return 1;
+}
 
+void listdir(const char *name, int indent){
+    // name: path della directory
+    // indent: numero di indentazioni
+    DIR *dir; // Directory dove ci troviamo noi
+    struct dirent *entry; // Contenuto della directory
+
+    if (!(dir = opendir(name))) // Se non riesce ad aprire la directory usciamo
+        return;
+
+    while ((entry = readdir(dir)) != NULL) { // Mentre scorre il contenuto della directory...
+        if (entry->d_type == DT_DIR) { // Se il contenuto corrisponde a una directory...
+            char bufpath[1024]; // buffer
+            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)continue;
+            
+            // snprintf scrive sul buffer specificato bufpath
+            snprintf(bufpath, sizeof(bufpath), "%s/%s", name, entry->d_name);            
+            
+            // stampa la directory e le sue sottodirectory
+            printf("%*s[%s]\n", indent, "", entry->d_name); 
+            listdir(bufpath, indent + 2); // Ricorsiva...
+        } else { // Altrimenti se e' un file...
+        //   printf("%*s- %s\n", indent, "", entry->d_name);
+        }
+    }
+    closedir(dir);
+}
 
 int main(int argc, char** argv) {    
     
@@ -136,7 +172,6 @@ int main(int argc, char** argv) {
      * argv[1]: primo argomento: opzione
      * argv[2]: secondo argomento: file in input */
     
-    //    printf("BENVENUTO");
     FILE *file = fopen(argv[2], "r"); // File di input
     FILE *fileOUTPUT = fopen("swordx.out", "w+"); // File di output
     
@@ -145,18 +180,11 @@ int main(int argc, char** argv) {
         switch(opt){
             case 'h':
                 getHelp();    
-                splitFile(file, fileOUTPUT);
+                //splitFile(file, fileOUTPUT); // Da commentare
                 break;
             case 'r':
                 printf("\nRecursive\n");
-                glob_t pglob;
-                glob(path, GLOB_ONLYDIR, NULL, &pglob);
-                printf("Trovati %d risultati\n", pglob.gl_pathc);
-                int i;
-                for(i = 0; i < pglob.gl_pathc; i++){
-                    printf("File %d: %s\n", i+1, pglob.gl_pathv[i]); // Lista le sottodirectory
-                }
-                globfree(&pglob);
+                listdir(".", 0);
                 
                 break;
             case 'f':

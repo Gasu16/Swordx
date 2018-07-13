@@ -62,11 +62,9 @@ void getocc(){
     }
     
     fclose(f1);
-    printf("\nOccorrenze: \n");
+    //printf("\nOccorrenze: \n");
     for(i = 0; i < index; i++){
         printf("%s => %d\n", parola[i], count[i]);
     }
-    
-    
     
 }
