@@ -30,7 +30,7 @@
 
 int opt; // Opzione scelta
 
-const char *short_options = "hrfeamis";
+const char *short_options = "hrfeamisl";
 const char *path = "/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/./*";
 
 struct option long_options[] = {
@@ -42,6 +42,7 @@ struct option long_options[] = {
     {"min", required_argument, NULL, 'm'}, // X
     {"ignore", required_argument, NULL, 'i'}, // X
     {"sortbyoccurrency", required_argument, NULL, 's'}, // X
+    {"log", required_argument, NULL, 'l'}, // X
     {NULL, 0, NULL, 0} // Controllo della fine della struttura
 };
 
@@ -205,7 +206,16 @@ int main(int argc, char** argv) {
             case 's':
                 printf("\nSort by occurrency\n");
                 break;
-                
+            case 'l':
+                // Per funzionare il nome del file di log dev'essere il terzo parametro
+                // ./swordx -l dati.log
+                printf("\nGenerazione file di log in corso...\n");
+                FILE *logFile = fopen(argv[2], "a+"); // Usiamo il metodo a+ cioe' appending
+                if(logFile == NULL){
+                    printf("\nFile di log non presente\n");
+                }
+                fprintf(logFile, "Sto loggando...");
+                break;
         }
     }
     getocc();
