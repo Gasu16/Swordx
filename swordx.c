@@ -250,7 +250,6 @@ int main(int argc, char** argv) {
                 printf("\nSort by occurrency\n");
                 break;
             case 'l':
-                // Per funzionare il nome del file di log dev'essere il terzo parametro
                 // ./swordx -l input.txt dati.log
                 printf("\nGenerazione file di log in corso...\n");
                 FILE *logFile = fopen(argv[3], "a+"); // Usiamo il metodo a+ cioe' appending
