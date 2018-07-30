@@ -9,7 +9,7 @@
  * Author: matteo
  *
  * Created on 25 giugno 2018, 12.01
- * Ultima modifica 30 luglio 2018, 14.49
+ * Ultima modifica 30 luglio 2018, 16.41
  */
 
 #include <stdio.h>
@@ -166,31 +166,43 @@ void listdir(const char *name, int indent){
     closedir(dir);
 }
 
-char *recover_filename(FILE *f) {
-    int fd;
-    char fd_path[255];
-    char *filename = malloc(255);
-    ssize_t n;
-    
-    fd = fileno(f);
-    sprintf(fd_path, "/proc/self/fd/%d", fd);
-    n = readlink(fd_path, filename, 255);
-    if (n < 0){
-        return NULL;
+/*
+ char *recover_filename(FILE *f) {
+ int fd;
+ char fd_path[255];
+ char *filename = malloc(255);
+ ssize_t n;
+ 
+ fd = fileno(f);
+ sprintf(fd_path, "/proc/self/fd/%d", fd);
+ n = readlink(fd_path, filename, 255);
+ if (n < 0){
+ return NULL;
+ }
+ 
+ filename[n] = '\0'; // Carattere di terminazione
+ printf("Nome file: \n%s\n", filename);
+ return filename;
+ }
+ 
+ 
+ 
+ void generate_log_file(FILE *logFile, FILE *fileIN){
+ char nomeFile = recover_filename(fileIN);
+ fprintf(logFile, nomeFile);
+ }
+ */
+
+// Funzione CW del log
+int conta_Parole(FILE *fileIN){
+    char vettore[LEN];
+    int contaparole = 0;
+    while(fscanf(fileIN, "%s", vettore) != EOF){
+        contaparole++;
     }
-    
-    filename[n] = '\0'; // Carattere di terminazione
-    printf("Nome file: \n%s\n", filename);
-    return filename;
+    printf("Conta parole (CW): %d\n", contaparole);
+    return contaparole;
 }
-
-
-
-void generate_log_file(FILE *logFile, FILE *fileIN){
-    char nomeFile = recover_filename(fileIN);
-    fprintf(logFile, nomeFile);
-}
-
 
 int main(int argc, char** argv) {    
     
@@ -260,13 +272,12 @@ int main(int argc, char** argv) {
                 int j;
                 for(j = 2; j < argc-1; j++){
                     // Lista dei file in input analizzati
-                    fprintf(logFile, "\n%s\n", argv[j]);        
+                    fprintf(logFile, "\n%s\t%d\n", argv[j], conta_Parole(file));        
                     printf("ARGV[j]: %s\n", argv[j]);
                     inputFiles[j] = fopen(argv[j], "r");
                     printf("Puntatore[j]: %p\n", inputFiles[j]);
                     
                 }
-                char nome_file = recover_filename(file);
                 
                 
                 break;
