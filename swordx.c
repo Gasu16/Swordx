@@ -9,7 +9,7 @@
  * Author: matteo
  *
  * Created on 25 giugno 2018, 12.01
- * Ultima modifica 30 luglio 2018, 16.41
+ * Ultima modifica 6 Agosto 2018, 18.13
  */
 
 #include <stdio.h>
@@ -23,13 +23,12 @@
 #include <getopt.h>
 #include <dirent.h>
 #include "occorrenze.h"
-//#include <glib-2.0/glib.h>
+#include <time.h>
 
 #define LEN 256
 #define DIM 256
 
 int opt; // Opzione scelta
-
 
 const char *short_options = "hrfeamisl";
 const char *path = "/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/./*";
@@ -43,7 +42,7 @@ struct option long_options[] = {
     {"min", required_argument, NULL, 'm'}, // X
     {"ignore", required_argument, NULL, 'i'}, // X
     {"sortbyoccurrency", required_argument, NULL, 's'}, // X
-    {"log", required_argument, NULL, 'l'}, // X
+    {"log", required_argument, NULL, 'l'}, // V
     {NULL, 0, NULL, 0} // Controllo della fine della struttura
 };
 
@@ -125,8 +124,8 @@ void splitFile(FILE *fileIN, FILE *fileOUT){
         printf("%s\n", array);
         fprintf(fileOUT, "%s\n", array);
     }
-    fclose(fileIN);
-    fclose(fileOUT);
+    //    fclose(fileIN);
+    //    fclose(fileOUT);
     
 }
 
@@ -166,43 +165,6 @@ void listdir(const char *name, int indent){
     closedir(dir);
 }
 
-/*
- char *recover_filename(FILE *f) {
- int fd;
- char fd_path[255];
- char *filename = malloc(255);
- ssize_t n;
- 
- fd = fileno(f);
- sprintf(fd_path, "/proc/self/fd/%d", fd);
- n = readlink(fd_path, filename, 255);
- if (n < 0){
- return NULL;
- }
- 
- filename[n] = '\0'; // Carattere di terminazione
- printf("Nome file: \n%s\n", filename);
- return filename;
- }
- 
- 
- 
- void generate_log_file(FILE *logFile, FILE *fileIN){
- char nomeFile = recover_filename(fileIN);
- fprintf(logFile, nomeFile);
- }
- */
-
-// Funzione CW del log
-int conta_Parole(FILE *fileIN){
-    char vettore[LEN];
-    int contaparole = 0;
-    while(fscanf(fileIN, "%s", vettore) != EOF){
-        contaparole++;
-    }
-    printf("Conta parole (CW): %d\n", contaparole);
-    return contaparole;
-}
 
 int main(int argc, char** argv) {    
     
@@ -212,8 +174,10 @@ int main(int argc, char** argv) {
      * argv[1]: primo argomento: opzione
      * argv[2]: secondo argomento: file in input */
     
+    
     FILE *file = fopen(argv[2], "r"); // File di input
     FILE *fileOUTPUT = fopen("swordx.out", "w+"); // File di output
+    FILE *logFile = fopen(argv[3], "a+"); // Usiamo il metodo a+ cioe' appending
     
     // Array dove metteremo tutti i file (solo quelli di input) analizzati (ci serve per il log)
     FILE *inputFiles[argc - 1]; 
@@ -263,27 +227,27 @@ int main(int argc, char** argv) {
                 break;
             case 'l':
                 // ./swordx -l input.txt dati.log
+                
                 printf("\nGenerazione file di log in corso...\n");
-                FILE *logFile = fopen(argv[3], "a+"); // Usiamo il metodo a+ cioe' appending
-                if(logFile == NULL){
-                    printf("\nFile di log non presente\n");
-                }
+                
+                splitFile(file, fileOUTPUT); 
                 
                 int j;
+                printf("Entro nel for\n");
                 for(j = 2; j < argc-1; j++){
                     // Lista dei file in input analizzati
-                    fprintf(logFile, "\n%s\t%d\n", argv[j], conta_Parole(file));        
                     printf("ARGV[j]: %s\n", argv[j]);
                     inputFiles[j] = fopen(argv[j], "r");
-                    printf("Puntatore[j]: %p\n", inputFiles[j]);
-                    
+                    printf("Puntatore[j]: %p\n", inputFiles[j]);                    
                 }
                 
-                
+                printf("Esco dal for\n");
                 break;
         }
     }
-    getocc();
+    fclose(file);
+    fclose(fileOUTPUT);
+    getocc(argc, argv);
     
     return 0;
 }

@@ -1,5 +1,5 @@
 Ciao mi chiamo Matteo 
-Sto loggando... /home/matteo/NetBeansProjects/ProgettoSistemiOperativi/input.txtàinput.txtinput.txt
+Sto loggando... /home/matteo/NetBeansProjects/ProgettoSistemiOperativi/input.txtinput.txtinput.txt
 input.txt
 input.txt
 input.txt
