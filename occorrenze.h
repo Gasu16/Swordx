@@ -91,7 +91,7 @@ int getocc(int argc, char *argv[]){
     int totale = indice + ignorate;
     for(contatore = 2; contatore < argc-1; contatore++){
         
-        // Formato stampa: "File" ---- "Parole contate" ---- "Parole ignorate ---- Tempo Elab. file"
+        // Formato stampa: "File" ---- "Parole contate" ---- "Parole ignorate" ---- "Tempo Elab. file"
         fprintf(flog, "\n%s\t%d\t%d\t%.3f msec\n", argv[contatore], indice, ignorate, ms);        
     }
     printf("Totale parole: %d\n", totale);
