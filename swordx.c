@@ -122,7 +122,7 @@ void splitFile(FILE *fileIN, FILE *fileOUT){
     fseek(fileIN, 0, SEEK_SET);
     while(fscanf(fileIN, "%s", array) != EOF){
         printf("%s\n", array);
-        fprintf(fileOUT, "%s\n", array);
+    //    fprintf(fileOUT, "%s\n", array);
     }
     //    fclose(fileIN);
     //    fclose(fileOUT);
@@ -224,6 +224,7 @@ int main(int argc, char** argv) {
                 break;
             case 's':
                 printf("\nSort by occurrency\n");
+                quicksort();
                 break;
             case 'l':
                 // ./swordx -l input.txt dati.log
@@ -248,7 +249,7 @@ int main(int argc, char** argv) {
     fclose(file);
     fclose(fileOUTPUT);
     getocc(argc, argv);
-    
+    quicksort();
     return 0;
 }
 

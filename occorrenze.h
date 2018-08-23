@@ -19,23 +19,56 @@
 static int cw = 0;
 static int indice = 0;
 static int ignorate = 0;
+static int count[LEN]; // Array dove vengono salvate le occorrenze di ogni parola
+static char parola[LEN][30]; // Puo' contenere LEN parole e un massimo di 30 caratteri per parola
 int getocc();
+void quicksort();
+void swap();
 
+
+void quicksort(){
+    int i, j; // i -> indice dell'elemento piu' piccolo; j -> indice dell'array per il ciclo
+    int pivot; /* Serve a dividere l'array in 2 parti
+                * Sinistra: tutti gli elementi minori del pivot
+                * Destra: tutti gli elementi maggiori del pivot */
+    int temporanea;
+//    printf("INDICE: %d\n", indice);
+//    int d; // Dimensione array
+//    d = indice;
+//    printf("D: %d\n", d);
+    pivot = count[indice - 1]; // Impostiamo il pivot come ultimo elemento
+    i = -1;
+    for(j = 0; j < indice; j++){
+        if(count[j] <= pivot){
+            i++;
+            //printf("Entrato nell'IF\n");
+            // Scambiamo i con j
+            temporanea = count[j];
+            count[j] = count[i];
+            count[i] = temporanea;
+        }
+    }
+    for(int conta = 0; conta < indice; conta++){
+        //printf("COUNT: %d\n", count[conta]);
+        printf("%s => %d\n", parola[conta], count[conta]);
+    }
+
+    return;
+}
 
 int getocc(int argc, char *argv[]){
     clock_t t;
     double cpu_time_used;
     // Dovra' essere scambiato con swordx.out
-    //    FILE *fin = fopen("/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/input.txt", "r+");
+    FILE *fin = fopen("/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/input.txt", "r+");
     FILE *fout = fopen("/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/swordx.out", "r+");
     FILE *flog = fopen("/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/dati.log", "r+");
     t = clock(); // START - Il numero di "tick" di clock trascorsi dall'inizio del programma 
     int len;
-    char parola[LEN][30]; // Puo' contenere LEN parole e un massimo di 30 caratteri per parola
-    int count[LEN];
+//    char parola[LEN][30]; // Puo' contenere LEN parole e un massimo di 30 caratteri per parola
+    
     int occ = 0;
     int i = 0, j = 0;
-    
     int num_parole = 0;
     int unico = 0;
     if(fout == NULL){
@@ -49,7 +82,7 @@ int getocc(int argc, char *argv[]){
     }
     
     
-    while(fscanf(fout, "%s", arr) != EOF){
+    while(fscanf(fin, "%s", arr) != EOF){
         
         len = strlen(arr);
         if(ispunct(arr[len - 1])){
@@ -91,7 +124,7 @@ int getocc(int argc, char *argv[]){
     int totale = indice + ignorate;
     for(contatore = 2; contatore < argc-1; contatore++){
         
-        // Formato stampa: "File" ---- "Parole contate" ---- "Parole ignorate" ---- "Tempo Elab. file"
+        // Formato stampa: "File" ---- "Parole contate" ---- "Parole ignorate ---- Tempo Elab. file"
         fprintf(flog, "\n%s\t%d\t%d\t%.3f msec\n", argv[contatore], indice, ignorate, ms);        
     }
     printf("Totale parole: %d\n", totale);
