@@ -9,50 +9,69 @@
  * Author: matteo
  *
  * Created on 11 luglio 2018, 17.45
- * Ultima modifica: 23 Agosto 2018, 18.18
+ * Ultima modifica: 25 Agosto 2018, 22.30
  */
 
 
 #define OCCORRENZE_H
 #define LEN 256
 #include <time.h>
+#include <string.h>
+#include <stdlib.h>
+
 static int cw = 0;
 static int indice = 0;
 static int ignorate = 0;
-static int count[LEN]; // Array dove vengono salvate le occorrenze di ogni parola
+//static int count[LEN]; // Array dove vengono salvate le occorrenze di ogni parola
 static char parola[LEN][30]; // Puo' contenere LEN parole e un massimo di 30 caratteri per parola
 int getocc();
 void quicksort();
-void swap();
+int cmp();
 
+// Andiamo a definire questa struttura di Parole per ordinarle in base alle occorrenze
+typedef struct{
+    char parole[LEN][30]; // La stringa
+    int count[LEN]; // Array dove vengono salvate le occorrenze di ogni parola
+} Parole;
+
+Parole P;
+
+int cmp(Parole *a, Parole *b){
+    // Ordinare le parole in base al numero di occorrenze
+    if(a->count < b->count)return +1;
+    if(a->count > b->count)return -1;
+    return 0;
+}
 
 void quicksort(){
-    int i, j; // i -> indice dell'elemento piu' piccolo; j -> indice dell'array per il ciclo
-    int pivot; /* Serve a dividere l'array in 2 parti
-                * Sinistra: tutti gli elementi minori del pivot
-                * Destra: tutti gli elementi maggiori del pivot */
-    int temporanea;
-//    printf("INDICE: %d\n", indice);
-//    int d; // Dimensione array
-//    d = indice;
-//    printf("D: %d\n", d);
-    pivot = count[indice - 1]; // Impostiamo il pivot come ultimo elemento
-    i = -1;
-    for(j = 0; j < indice; j++){
-        if(count[j] <= pivot){
-            i++;
-            //printf("Entrato nell'IF\n");
-            // Scambiamo i con j
-            temporanea = count[j];
-            count[j] = count[i];
-            count[i] = temporanea;
-        }
-    }
+//        int i, j; // i -> indice dell'elemento piu' piccolo; j -> indice dell'array per il ciclo
+//        int pivot; /* Serve a dividere l'array in 2 parti
+//                    * Sinistra: tutti gli elementi minori del pivot
+//                    * Destra: tutti gli elementi maggiori del pivot */
+//        int temporanea;
+//        char temp[LEN];
+//        pivot = P.count[indice - 1]; // Impostiamo il pivot come ultimo elemento
+//        i = -1;
+//        // Ordiniamo count dal piu' piccolo al piu' grande
+//        for(j = 0; j < indice; j++){
+//            if(P.count[j] <= pivot){
+//                i++;
+//                //printf("Entrato nell'IF\n");
+//                // Scambiamo i con j
+//                temporanea = P.count[j];
+//                P.count[j] = P.count[i];
+//                P.count[i] = temporanea;
+//            }
+//        }
+    // qsort((void *) P.parole, indice, sizeof(char), (int (*) (const void *, const void *)) cmp);
+    qsort(P.parole, indice, sizeof(char), cmp);
+    printf("\nINIZIO DA QUI\n");
+
     for(int conta = 0; conta < indice; conta++){
         //printf("COUNT: %d\n", count[conta]);
-        printf("%s => %d\n", parola[conta], count[conta]);
+        
+        printf("%s => %d\n", P.parole[conta], P.count[conta]);
     }
-
     return;
 }
 
@@ -65,7 +84,7 @@ int getocc(int argc, char *argv[]){
     FILE *flog = fopen("/home/matteo/NetBeansProjects/ProgettoSistemiOperativi/dati.log", "r+");
     t = clock(); // START - Il numero di "tick" di clock trascorsi dall'inizio del programma 
     int len;
-//    char parola[LEN][30]; // Puo' contenere LEN parole e un massimo di 30 caratteri per parola
+    //    char parola[LEN][30]; // Puo' contenere LEN parole e un massimo di 30 caratteri per parola
     
     int occ = 0;
     int i = 0, j = 0;
@@ -78,7 +97,7 @@ int getocc(int argc, char *argv[]){
     // Leggi file
     // Setta tutte le celle di count a 0
     for(int c = 0; c < LEN; c++){
-        count[c] = 0;
+        P.count[c] = 0;
     }
     
     
@@ -90,25 +109,25 @@ int getocc(int argc, char *argv[]){
         }
         unico = 1;
         for(i = 0; i < indice && unico; i++){
-            if(strcmp(parola[i], arr) == 0){
+            if(strcmp(P.parole[i], arr) == 0){
                 unico = 0;
                 ignorate++; // Se la parola e' gia' stata trovata allora...
             }
         }
         
         if(unico){
-            strcpy(parola[indice], arr);
-            count[indice]++;
+            strcpy(P.parole[indice], arr);
+            P.count[indice]++;
             indice++;
         }
         else{
-            count[i - 1]++;
+            P.count[i - 1]++;
         }
     }
     int conta;
     for(i = 0; i < indice; i++){
-        fprintf(fout, "%s => %d\n", parola[i], count[i]);
-        printf("%s => %d\n", parola[i], count[i]);
+        fprintf(fout, "%s => %d\n", P.parole[i], P.count[i]);
+        printf("%s => %d\n", P.parole[i], P.count[i]);
     }
     
     printf("Numero parole: %d\n", indice);
