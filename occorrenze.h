@@ -9,7 +9,7 @@
  * Author: matteo
  *
  * Created on 11 luglio 2018, 17.45
- * Ultima modifica: 25 Agosto 2018, 22.30
+ * Ultima modifica: 31 Agosto 2018, 20.10
  */
 
 
@@ -18,10 +18,12 @@
 #include <time.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 static int cw = 0;
 static int indice = 0;
 static int ignorate = 0;
+
 //static int count[LEN]; // Array dove vengono salvate le occorrenze di ogni parola
 static char parola[LEN][30]; // Puo' contenere LEN parole e un massimo di 30 caratteri per parola
 int getocc();
@@ -32,44 +34,46 @@ int cmp();
 typedef struct{
     char parole[LEN][30]; // La stringa
     int count[LEN]; // Array dove vengono salvate le occorrenze di ogni parola
+    int frequenza;
 } Parole;
 
 Parole P;
 
-int cmp(Parole *a, Parole *b){
+int cmp(const void *a, const void *b){
     // Ordinare le parole in base al numero di occorrenze
-    if(a->count < b->count)return +1;
-    if(a->count > b->count)return -1;
-    return 0;
+    Parole *p1 = (Parole *)a;
+    Parole *p2 = (Parole *)b;
+    return (p2->count - p1->count);
 }
 
-void quicksort(){
-//        int i, j; // i -> indice dell'elemento piu' piccolo; j -> indice dell'array per il ciclo
-//        int pivot; /* Serve a dividere l'array in 2 parti
-//                    * Sinistra: tutti gli elementi minori del pivot
-//                    * Destra: tutti gli elementi maggiori del pivot */
-//        int temporanea;
-//        char temp[LEN];
-//        pivot = P.count[indice - 1]; // Impostiamo il pivot come ultimo elemento
-//        i = -1;
-//        // Ordiniamo count dal piu' piccolo al piu' grande
-//        for(j = 0; j < indice; j++){
-//            if(P.count[j] <= pivot){
-//                i++;
-//                //printf("Entrato nell'IF\n");
-//                // Scambiamo i con j
-//                temporanea = P.count[j];
-//                P.count[j] = P.count[i];
-//                P.count[i] = temporanea;
-//            }
-//        }
-    // qsort((void *) P.parole, indice, sizeof(char), (int (*) (const void *, const void *)) cmp);
-    qsort(P.parole, indice, sizeof(char), cmp);
-    printf("\nINIZIO DA QUI\n");
 
+void quicksort(){
+    int i, j; // i -> indice dell'elemento piu' piccolo; j -> indice dell'array per il ciclo
+    int pivot; /* Serve a dividere l'array in 2 parti
+                * Sinistra: tutti gli elementi minori del pivot
+                * Destra: tutti gli elementi maggiori del pivot */
+    int temporanea;
+    char temp[LEN];
+    
+    pivot = P.count[indice - 1]; // Impostiamo il pivot come ultimo elemento
+    i = -1;
+    // Ordiniamo count dal piu' piccolo al piu' grande
+    for(j = 0; j < indice; j++){
+        if(P.count[j] <= pivot){
+            i++;
+            //printf("Entrato nell'IF\n");
+            // Scambiamo i con j
+            temporanea = P.count[j];
+            P.count[j] = P.count[i];
+            P.count[i] = temporanea;
+        }
+    }
+    //    qsort((void *) P.parole, indice, sizeof(char), (int (*) (const void *, const void *)) cmp);
+    //    qsort(P.parole, indice, sizeof(char), cmp);
+    printf("\nINIZIO DA QUI\n");
+    
     for(int conta = 0; conta < indice; conta++){
         //printf("COUNT: %d\n", count[conta]);
-        
         printf("%s => %d\n", P.parole[conta], P.count[conta]);
     }
     return;
@@ -102,7 +106,6 @@ int getocc(int argc, char *argv[]){
     
     
     while(fscanf(fin, "%s", arr) != EOF){
-        
         len = strlen(arr);
         if(ispunct(arr[len - 1])){
             arr[len - 1] = '\0'; // Se e' puntato mettiamo il carattere di terminazione
